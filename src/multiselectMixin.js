@@ -563,8 +563,9 @@ export default {
       if (this.wholeGroupSelected(group)) {
         this.$emit('remove', group[this.groupValues], this.id)
 
+        const groupValues = this.trackBy ? group[this.groupValues].map(val => val[this.trackBy]) : group[this.groupValues]
         const newValue = this.internalValue.filter(
-          option => group[this.groupValues].indexOf(option) === -1
+          option => groupValues.indexOf(this.trackBy ? option[this.trackBy] : option) === -1
         )
 
         this.$emit('input', newValue, this.id)
@@ -688,7 +689,7 @@ export default {
       this.isOpen = false
       /* istanbul ignore else  */
       if (this.searchable) {
-        if (typeof this.$refs.search !== 'undefined') this.$refs.search.blur()
+        if (this.$refs.search !== null && typeof this.$refs.search !== 'undefined') this.$refs.search.blur()
       } else {
         if (typeof this.$el !== 'undefined') this.$el.blur()
       }
